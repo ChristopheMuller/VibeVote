@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "Session": {
+      "title": "Session",
+      "description": "A Spotify voting session",
+      "type": "object",
+      "properties": {
+        "hostId": { "type": "string", "description": "The UID of the host" },
+        "playlistId": { "type": "string", "description": "The Spotify playlist ID" },
+        "playlistName": { "type": "string", "description": "The name of the playlist" },
+        "active": { "type": "boolean", "description": "Whether the session is active" },
+        "votingTracks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "artist": { "type": "string" },
+              "albumArt": { "type": "string" },
+              "votes": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["hostId", "playlistId", "active"]
+    },
+    "Vote": {
+      "title": "Vote",
+      "description": "A vote for a track",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "trackId": { "type": "string" },
+        "userId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sessionId", "trackId", "userId"]
+    }
+  },
+  "firestore": {
+    "/sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Active voting sessions"
+    },
+    "/sessions/{sessionId}/votes/{voteId}": {
+      "schema": "Vote",
+      "description": "Votes for tracks in a session"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Spotify Vote Next",
+  "description": "A collaborative Spotify queue where users vote for the next song from a selected playlist.",
+  "requestFramePermissions": []
+}

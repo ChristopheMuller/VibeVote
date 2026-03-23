@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidSession(data) {
+      return data.hostId is string &&
+             data.playlistId is string &&
+             data.active is bool;
+    }
+
+    function isValidVote(data) {
+      return data.sessionId is string &&
+             data.trackId is string &&
+             data.userId is string;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+    match /sessions/{sessionId} {
+      allow read: if true; // Anyone can see the session to vote
+      allow create: if isAuthenticated() && request.resource.data.hostId == request.auth.uid && isValidSession(request.resource.data);
+      allow update: if isAuthenticated() && resource.data.hostId == request.auth.uid && isValidSession(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.hostId == request.auth.uid;
+
+      match /votes/{voteId} {
+        allow read: if true;
+        allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid && isValidVote(request.resource.data);
+        allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && isValidVote(request.resource.data);
+        allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      }
+    }
+  }
+}
