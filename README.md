@@ -5,7 +5,7 @@ Spotify Vote is a web application that allows a host to connect their Spotify ac
 ### What it looks like
 
 ![Homescreen](./screenshots/homescreen.png)
-*Caption: The user decides whether to host a session or to joing one.*
+*Caption: The user decides whether to host a session or to join one.*
 
 ![Host interface](./screenshots/host_view.png)
 *Caption: The host connects to Spotify, chooses settings of the session and the playlist, then monitors the votes.*
